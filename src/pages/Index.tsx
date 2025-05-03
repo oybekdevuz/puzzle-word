@@ -1,11 +1,19 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import GameBoard from '../components/GameBoard';
 import { words } from '../data/words';
 
+function shuffleWords(wordsArr: typeof words) {
+  const shuffled = [...wordsArr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 10);
+}
+
 const Index = () => {
-  const [shuffledWords, setShuffledWords] = useState(words);
-  
+  const [shuffledWords, setShuffledWords] = useState(() => shuffleWords(words));
+
+  const restartGame = useCallback(() => {
+    setShuffledWords(shuffleWords(words));
+  }, []);
   useEffect(() => {
     // Shuffle the words array
     const shuffled = [...words].sort(() => Math.random() - 0.5);
@@ -24,7 +32,7 @@ const Index = () => {
         </header>
         
         <main>
-          <GameBoard words={shuffledWords} />
+          <GameBoard words={shuffledWords} onRestart={restartGame} />
         </main>
         
         <footer className="mt-12 text-center text-sm text-gray-500">

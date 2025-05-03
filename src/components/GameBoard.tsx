@@ -9,9 +9,10 @@ import confetti from 'canvas-confetti';
 
 interface GameBoardProps {
   words: WordData[];
+  onRestart?: () => void;
 }
 
-const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
+const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
   const [lives, setLives] = useState(5);
@@ -20,7 +21,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
   const [timeExpired, setTimeExpired] = useState(false);
   const [showError, setShowError] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-
+  const [trueAnswersCount, setTrueAnswersCount ] = useState(0)
 
   const currentWord = words[currentWordIndex]?.word || '';
   const currentHint = words[currentWordIndex]?.hint || '';
@@ -100,12 +101,17 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
   // Javobni tekshirish
   const handleSubmit = () => {
     const submittedWord = selectedLetters.join('');
-    console.log(submittedWord.toLowerCase(), currentWord.toLowerCase());
     
-    if (submittedWord.toLowerCase() === currentWord.toLowerCase()) {
-      // To'g'ri javob
-      if (currentWordIndex + 1 >= 10) {
-        setGameWon(true);
+    if (submittedWord.toLowerCase() === currentWord) {
+      const nextTrueAnswersCount = trueAnswersCount + 1;
+      setTrueAnswersCount(nextTrueAnswersCount);
+      
+      if (currentWordIndex + 1 >= 10) {        
+        if(nextTrueAnswersCount == 10){
+          setGameWon(true);
+        }else {
+          setGameWon(false);
+        }
         setGameOver(true);
       } else {
         setCurrentWordIndex(currentWordIndex + 1);
@@ -146,12 +152,14 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
 
   // O'yinni qayta boshlash
   const handleRestart = () => {
+    if (onRestart) onRestart();
     setCurrentWordIndex(0);
     setLives(5);
     setGameOver(false);
     setGameWon(false);
     setSelectedLetters([]);
     setShowError(false);
+    setGameStarted(false);
   };
 
   // O'rtadagi harfni ko'rsatadigan komponent
@@ -175,7 +183,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
         <p className="text-xl mb-8">
           {gameWon 
             ? `Tabriklayman! Siz barcha ${Math.min(10, words.length)} ta so'zni to'g'ri topdingiz!` 
-            : `Joningiz tugab qoldi 😕!`}
+            : `Afsus siz yutqazdingiz 😕!`}
         </p>
         <button
           onClick={handleRestart}

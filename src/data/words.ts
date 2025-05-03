@@ -5,113 +5,113 @@ export interface WordData {
 }
 
 export const words: WordData[] = [
+   {
+       word: "kitob",
+       hint: "Varaqlardan iborat oʻqish uchun moʻljallangan buyum"
+   },
+   {
+       word: "qalam",
+       hint: "Yozish uchun ishlatiladigan asbob"
+   },
+   {
+       word: "dasturxon",
+       hint: "Ovqatlanish uchun yoziladigan maxsus mato"
+   },
+   {
+       word: "paxta",
+       hint: "Oq rangli, yumshoq tolali oʻsimlik"
+   },
+   {
+       word: "bozor",
+       hint: "Savdo-sotiq qilinadigan joy"
+   },
+   {
+       word: "tarvuz",
+       hint: "Yozgi poliz ekini, ichi qizil"
+   },
+   {
+       word: "kapalak",
+       hint: "Rangli qanotli hasharot"
+   },
+   {
+       word: "quyosh",
+       hint: "Osmonning yorugʻ yoritgichi"
+   },
+   {
+       word: "bulut",
+       hint: "Osmondagi suv bugʻlari toʻplami"
+   },
+   {
+       word: "sabzi",
+       hint: "Toʻq sariq rangli ildizmeva"
+   },
+   {
+       word: "telefon",
+       hint: "Aloqa vositasi"
+   },
+   {
+       word: "shamol",
+       hint: "Harakatlanuvchi havo oqimi"
+   },
+   {
+       word: "yomgʻir",
+       hint: "Osmonda bulutdan tushadigan suv"
+   },
+   {
+       word: "osmon",
+       hint: "Yerning tepasidagi moviy sath"
+   },
+   {
+       word: "daftar",
+       hint: "Yozish uchun varaqlari bor buyum"
+   },
+   {
+       word: "bolgar",
+       hint: "Qizil rangli sabzavot"
+   },
+   {
+       word: "muzqaymoq",
+       hint: "Sovutilgan shirin taom"
+   },
+   {
+       word: "koptok",
+       hint: "Oʻynash uchun dumaloq buyum"
+   },
+   {
+       word: "gilam",
+       hint: "Polga toʻshaladigan buyum"
+   },
+   {
+       word: "qaychi",
+       hint: "Kesish uchun asbob"
+   },
+   {
+       word: "maktab",
+       hint: "Ta'lim beriladigan muassasa"
+   },
+   {
+       word: "oyna",
+       hint: "Koʻrinish uchun shaffof buyum"
+   },
+   {
+       word: "soat",
+       hint: "Vaqtni koʻrsatuvchi asbob"
+   },
+   {
+       word: "daraxt",
+       hint: "Yirik oʻsimlik turi"
+   },
   {
-      word: "kitob",
-      hint: "Varaqlardan iborat oʻqish uchun moʻljallangan buyum"
+      word: "koʻprik",
+      hint: "Daryo yoki yoʻl ustidan oʻtuvchi inshoot"
   },
+   {
+       word: "oyoq",
+       hint: "Tanadagi pastki a’zo"
+   },
   {
-      word: "qalam",
-      hint: "Yozish uchun ishlatiladigan asbob"
-  },
-  {
-      word: "dasturxon",
-      hint: "Ovqatlanish uchun yoziladigan maxsus mato"
-  },
-  {
-      word: "paxta",
-      hint: "Oq rangli, yumshoq tolali oʻsimlik"
-  },
-  {
-      word: "bozor",
-      hint: "Savdo-sotiq qilinadigan joy"
-  },
-  {
-      word: "tarvuz",
-      hint: "Yozgi poliz ekini, ichi qizil"
-  },
-  {
-      word: "kapalak",
-      hint: "Rangli qanotli hasharot"
-  },
-  {
-      word: "quyosh",
-      hint: "Osmonning yorugʻ yoritgichi"
-  },
-  {
-      word: "bulut",
-      hint: "Osmondagi suv bugʻlari toʻplami"
-  },
-  {
-      word: "sabzi",
-      hint: "Toʻq sariq rangli ildizmeva"
-  },
-  {
-      word: "telefon",
-      hint: "Aloqa vositasi"
-  },
-  {
-      word: "shamol",
-      hint: "Harakatlanuvchi havo oqimi"
-  },
-  {
-      word: "yomgʻir",
-      hint: "Osmonda bulutdan tushadigan suv"
-  },
-  {
-      word: "osmon",
-      hint: "Yerning tepasidagi moviy sath"
-  },
-  {
-      word: "daftar",
-      hint: "Yozish uchun varaqlari bor buyum"
-  },
-  {
-      word: "bolgar",
-      hint: "Qizil rangli sabzavot"
-  },
-  {
-      word: "muzqaymoq",
-      hint: "Sovutilgan shirin taom"
-  },
-  {
-      word: "koptok",
-      hint: "Oʻynash uchun dumaloq buyum"
-  },
-  {
-      word: "gilam",
-      hint: "Polga toʻshaladigan buyum"
-  },
-  {
-      word: "qaychi",
-      hint: "Kesish uchun asbob"
-  },
-  {
-      word: "maktab",
-      hint: "Ta'lim beriladigan muassasa"
-  },
-  {
-      word: "oyna",
-      hint: "Ko‘rinish uchun shaffof buyum"
-  },
-  {
-      word: "soat",
-      hint: "Vaqtni ko‘rsatuvchi asbob"
-  },
-  {
-      word: "daraxt",
-      hint: "Yirik o‘simlik turi"
-  },
-  {
-      word: "ko‘prik",
-      hint: "Daryo yoki yo‘l ustidan o‘tuvchi inshoot"
-  },
-  {
-      word: "oyoq",
-      hint: "Tanadagi pastki a’zo"
-  },
-  {
-      word: "ko‘z",
-      hint: "Ko‘rish a’zosi"
+      word: "koʻz",
+      hint: "Koʻrish a’zosi"
   },
   {
       word: "quloq",
@@ -122,19 +122,19 @@ export const words: WordData[] = [
       hint: "Hid bilish a’zosi"
   },
   {
-      word: "og‘iz",
+      word: "ogʻiz",
       hint: "Ovqat yeyish uchun a’zo"
   },
   {
       word: "tish",
-      hint: "Og‘izdagi qattiq a’zo"
+      hint: "Ogʻizdagi qattiq a’zo"
   },
   {
       word: "qalpoq",
       hint: "Bosh kiyim"
   },
   {
-      word: "ko‘ylak",
+      word: "koʻylak",
       hint: "Ustki kiyim"
   },
   {
@@ -151,27 +151,27 @@ export const words: WordData[] = [
   },
   {
       word: "stol",
-      hint: "Ustiga narsa qo‘yiladigan mebel"
+      hint: "Ustiga narsa qoʻyiladigan mebel"
   },
   {
       word: "stul",
-      hint: "O‘tirish uchun mebel"
+      hint: "Oʻtirish uchun mebel"
   },
   {
       word: "divan",
-      hint: "Yotish va o‘tirish uchun mebel"
+      hint: "Yotish va oʻtirish uchun mebel"
   },
   {
       word: "karavot",
       hint: "Yotish uchun mebel"
   },
   {
-      word: "ko‘rpa",
+      word: "koʻrpa",
       hint: "Yopinish uchun buyum"
   },
   {
       word: "yostiq",
-      hint: "Bosh qo‘yiladigan buyum"
+      hint: "Bosh qoʻyiladigan buyum"
   },
   {
       word: "choynak",
@@ -198,8 +198,8 @@ export const words: WordData[] = [
       hint: "Ovqat solinadigan idish"
   },
   {
-      word: "ko‘zgu",
-      hint: "O‘z aksini ko‘rish uchun buyum"
+      word: "koʻzgu",
+      hint: "Oʻz aksini koʻrish uchun buyum"
   },
   {
       word: "kompyuter",
@@ -207,11 +207,11 @@ export const words: WordData[] = [
   },
   {
       word: "printer",
-      hint: "Qog‘ozga chiqaruvchi qurilma"
+      hint: "Qogʻozga chiqaruvchi qurilma"
   },
   {
       word: "monitor",
-      hint: "Tasvir ko‘rsatuvchi qurilma"
+      hint: "Tasvir koʻrsatuvchi qurilma"
   },
   {
       word: "sichqoncha",
@@ -226,36 +226,36 @@ export const words: WordData[] = [
       hint: "Katta suv oqimi"
   },
   {
-      word: "ko‘l",
-      hint: "Suv to‘plangan joy"
+      word: "koʻl",
+      hint: "Suv toʻplangan joy"
   },
   {
-      word: "tog‘",
+      word: "togʻ",
       hint: "Yuqori balandlikdagi yer"
   },
   {
-      word: "cho‘l",
+      word: "choʻl",
       hint: "Quruq va issiq hudud"
   },
   {
-      word: "o‘rmon",
-      hint: "Ko‘p daraxtli joy"
+      word: "oʻrmon",
+      hint: "Koʻp daraxtli joy"
   },
   {
       word: "gullar",
-      hint: "Rangli o‘simliklar"
+      hint: "Rangli oʻsimliklar"
   },
   {
       word: "meva",
-      hint: "Daraxtda o‘sadigan shirin mahsulot"
+      hint: "Daraxtda oʻsadigan shirin mahsulot"
   },
   {
       word: "sabzavot",
-      hint: "Yerda o‘sadigan oziq-ovqat"
+      hint: "Yerda oʻsadigan oziq-ovqat"
   },
   {
       word: "olma",
-      hint: "Daraxtda o‘sadigan meva"
+      hint: "Daraxtda oʻsadigan meva"
   },
   {
       word: "anor",
@@ -275,7 +275,7 @@ export const words: WordData[] = [
   },
   {
       word: "apelsin",
-      hint: "To‘q sariq rangli sitrus meva"
+      hint: "Toʻq sariq rangli sitrus meva"
   },
   {
       word: "limon",
@@ -299,38 +299,38 @@ export const words: WordData[] = [
   },
   {
       word: "kartoshka",
-      hint: "Yer ostida o‘sadigan va ko'p ishlatiladigan sabzavot"
+      hint: "Yer ostida oʻsadigan va ko'p ishlatiladigan sabzavot"
   },
   {
       word: "piyoz",
-      hint: "Ko‘zga achchiq qiladigan sabzavot"
+      hint: "Koʻzga achchiq qiladigan sabzavot"
   },
   {
       word: "sarimsoq",
-      hint: "Badbo‘y hidli sabzavot"
+      hint: "Badboʻy hidli sabzavot"
   },
   {
       word: "sabzi",
-      hint: "To‘q sariq rangli ildizmeva"
+      hint: "Toʻq sariq rangli ildizmeva"
   },
   {
       word: "qalampir",
       hint: "Achchiq sabzavot"
   },
   {
-      word: "no‘xat",
-      hint: "Mayda dumaloq dukkakli o‘simlik"
+      word: "noʻxat",
+      hint: "Mayda dumaloq dukkakli oʻsimlik"
   },
   {
       word: "loviya",
-      hint: "Uzun dukkakli o‘simlik"
+      hint: "Uzun dukkakli oʻsimlik"
   },
   {
       word: "guruch",
       hint: "Oq rangli don"
   },
   {
-      word: "bug‘doy",
+      word: "bugʻdoy",
       hint: "Non uchun asosiy don"
   },
   {
@@ -346,7 +346,7 @@ export const words: WordData[] = [
       hint: "Taomga lazzat beruvchi mahsulot"
   },
   {
-      word: "yog‘",
+      word: "yogʻ",
       hint: "Taom pishirish uchun suyuqlik"
   },
   {
@@ -370,7 +370,7 @@ export const words: WordData[] = [
       hint: "Parrandadan olinadigan mahsulot"
   },
   {
-      word: "go‘sht",
+      word: "goʻsht",
       hint: "Hayvonlardan olinadigan oziq-ovqat"
   },
   {
@@ -383,19 +383,19 @@ export const words: WordData[] = [
   },
   {
       word: "qovurdoq",
-      hint: "Go‘shtdan tayyorlanadigan taom"
+      hint: "Goʻshtdan tayyorlanadigan taom"
   },
   {
       word: "palov",
       hint: "Guruchdan tayyorlanadigan mashhur taom"
   },
   {
-      word: "lag‘mon",
-      hint: "Uzoq cho‘zilgan xamirli taom"
+      word: "lagʻmon",
+      hint: "Uzoq choʻzilgan xamirli taom"
   },
   {
       word: "manti",
-      hint: "Bug‘da pishiriladigan xamirli taom"
+      hint: "Bugʻda pishiriladigan xamirli taom"
   },
   {
       word: "chuchvara",
@@ -403,15 +403,15 @@ export const words: WordData[] = [
   },
   {
       word: "shashlik",
-      hint: "Go‘shtdan tayyorlanadigan kabob"
+      hint: "Goʻshtdan tayyorlanadigan kabob"
   },
   {
       word: "norin",
-      hint: "Go‘sht va xamirli taom"
+      hint: "Goʻsht va xamirli taom asosan Toshkentda"
   },
   {
       word: "somsa",
-      hint: "Xamirli, go‘shtli taom"
+      hint: "Xamirli, goʻshtli taom milly"
   },
   {
       word: "patir",
@@ -422,7 +422,7 @@ export const words: WordData[] = [
       hint: "Suvda pishiriladigan taom"
   },
   {
-      word: "sho‘rva",
-      hint: "Suyuq go‘shtli va sabzavotli taom"
+      word: "shoʻrva",
+      hint: "Suyuq goʻshtli va sabzavotli taom"
   }
 ];
