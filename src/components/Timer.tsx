@@ -40,8 +40,8 @@ const Timer: React.FC<TimerProps> = ({ duration, onTimeExpired, isPaused }) => {
   return (
     <div className="w-full">
       <div className="flex justify-between text-sm mb-1">
-        <span>Time Remaining</span>
-        <span>{timeLeft} seconds</span>
+        <span>Vaqtni qadrlang</span>
+        <span>{timeLeft} sekund</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2.5">
         <div 

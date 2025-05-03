@@ -1,24 +1,31 @@
-
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface VirtualKeyboardProps {
-  letters: string[];
-  onLetterClick: (letter: string, index: number) => void;
+  letters: string[][];
+  onLetterClick: (letter: string) => void;
 }
 
 const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ letters, onLetterClick }) => {
   return (
-    <div className="flex flex-wrap justify-center gap-2 md:gap-3 w-full">
-      {letters.map((letter, index) => (
-        <button
-          key={index}
-          className="w-12 h-12 md:w-14 md:h-14 bg-white rounded-lg text-xl font-bold 
-                   shadow-md hover:bg-primary hover:text-white transition-colors 
-                   active:scale-95 transform"
-          onClick={() => onLetterClick(letter, index)}
-        >
-          {letter}
-        </button>
+    <div className="w-full">
+      {letters.map((row, rowIndex) => (
+        <div key={rowIndex} className="flex justify-center gap-1 mb-1">
+          {row.map((letter, letterIndex) => (
+            <button
+              key={`${rowIndex}-${letterIndex}`}
+              className={cn(
+                "w-10 h-10 flex items-center justify-center rounded-md font-medium text-lg",
+                "bg-white/90 border border-gray-200 shadow-sm",
+                "hover:bg-primary hover:text-white transition-colors",
+                letter.length > 1 ? "w-16" : "w-10" // Kattaroq tugma maxsus harflar uchun
+              )}
+              onClick={() => onLetterClick(letter)}
+            >
+              {letter}
+            </button>
+          ))}
+        </div>
       ))}
     </div>
   );

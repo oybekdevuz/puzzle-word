@@ -17,9 +17,9 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-slate-900 dark:to-indigo-950">
       <div className="container px-4 py-8 mx-auto">
         <header className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-primary">Word Puzzle Challenge</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-primary">So'zlarni top</h1>
           <p className="text-muted-foreground">
-            Drag or click letters to form words. You have 5 lives to solve 10 puzzles!
+            Harflarni ustiga bosib kataklarni to'ldiring. Sizda 10 ta savolni yechish uchun 5ta jon bor!
           </p>
         </header>
         
@@ -28,7 +28,7 @@ const Index = () => {
         </main>
         
         <footer className="mt-12 text-center text-sm text-gray-500">
-          <p>Drag letters to the slots or click to place them. Click on placed letters to remove.</p>
+          <p>Kataklarga harflarni qo'yish uchun harflarni ustiga bosing. Orqaga qaytarish uchun esa katakdagi harfga bosing</p>
         </footer>
       </div>
     </div>

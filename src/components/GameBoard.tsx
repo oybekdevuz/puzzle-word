@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { WordData } from '../data/words';
 import LetterSlot from './LetterSlot';
@@ -6,6 +5,7 @@ import VirtualKeyboard from './VirtualKeyboard';
 import GameStatus from './GameStatus';
 import Timer from './Timer';
 import { cn } from '@/lib/utils';
+import confetti from 'canvas-confetti';
 
 interface GameBoardProps {
   words: WordData[];
@@ -14,26 +14,32 @@ interface GameBoardProps {
 const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
-  const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
   const [lives, setLives] = useState(5);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [timeExpired, setTimeExpired] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+
 
   const currentWord = words[currentWordIndex]?.word || '';
   const currentHint = words[currentWordIndex]?.hint || '';
-  
-  // Shuffle letters for the current word
-  const shuffleLetters = useCallback((word: string) => {
-    const letters = word.split('');
-    for (let i = letters.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [letters[i], letters[j]] = [letters[j], letters[i]];
-    }
-    return letters;
-  }, []);
 
-  // Reset for a new word
+  // O'zbek morze alifbosi (harflar morze kod tartibida)
+  const UZBEK_KEYBOARD_LAYOUT = [
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+    ["Z", "X", "C", "V", "B", "N", "M","ʻ"],
+  ];
+
+  // O'rtadagi harfni topish
+  const getMiddleLetter = useCallback((word: string) => {
+    if (!word) return '';
+    const middleIndex = Math.floor(word.length / 2);
+    return word[middleIndex].toUpperCase();
+  }, []);
+  
+  // Yangi so'z uchun qayta sozlash
   const setupNewWord = useCallback(() => {
     if (currentWordIndex >= words.length) {
       setGameWon(true);
@@ -41,46 +47,63 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
       return;
     }
     setSelectedLetters([]);
-    setShuffledLetters(shuffleLetters(currentWord));
     setTimeExpired(false);
-  }, [currentWordIndex, currentWord, shuffleLetters, words.length]);
+    setShowError(false);
+  }, [currentWordIndex, words.length]);
 
-  // Initialize game
+  // O'yinni boshlash
   useEffect(() => {
     setupNewWord();
   }, [currentWordIndex, setupNewWord]);
 
-  // Handle letter click from keyboard
-  const handleLetterClick = (letter: string, index: number) => {
+  // Confetti animatsiyasini ishga tushirish
+  const launchConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  };
+
+  // Yutuqni nishonlash
+  useEffect(() => {
+    if (gameWon) {
+      launchConfetti();
+      // Bir necha marta confetti otilishi
+      const interval = setInterval(() => {
+        launchConfetti();
+      }, 700);
+      
+      setTimeout(() => {
+        clearInterval(interval);
+      }, 3000);
+    }
+  }, [gameWon]);
+
+  // Klaviaturadan harf tanlash - harflar yo'q bo'lib ketmaydi
+  const handleLetterClick = (letter: string) => {
     if (selectedLetters.length < currentWord.length) {
       setSelectedLetters([...selectedLetters, letter]);
-      
-      // Remove letter from shuffled letters
-      setShuffledLetters(shuffledLetters.filter((_, i) => i !== index));
     }
   };
 
-  // Handle letter removal from slots
+  // Harfni o'chirib tashlash
   const handleLetterRemove = (index: number) => {
     if (index >= 0 && index < selectedLetters.length) {
-      const removedLetter = selectedLetters[index];
-      
-      // Add letter back to shuffled letters
-      setShuffledLetters([...shuffledLetters, removedLetter]);
-      
-      // Remove letter from selected letters
+      // Faqat tanlangan harflar ro'yxatidan olib tashlash
       const newSelectedLetters = [...selectedLetters];
       newSelectedLetters.splice(index, 1);
       setSelectedLetters(newSelectedLetters);
     }
   };
 
-  // Submit answer
+  // Javobni tekshirish
   const handleSubmit = () => {
     const submittedWord = selectedLetters.join('');
+    console.log(submittedWord.toLowerCase(), currentWord.toLowerCase());
     
-    if (submittedWord === currentWord) {
-      // Correct answer
+    if (submittedWord.toLowerCase() === currentWord.toLowerCase()) {
+      // To'g'ri javob
       if (currentWordIndex + 1 >= 10) {
         setGameWon(true);
         setGameOver(true);
@@ -88,17 +111,25 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
         setCurrentWordIndex(currentWordIndex + 1);
       }
     } else {
-      // Incorrect answer
+      // Xato javob - qizil fon ko'rsatish
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 1000);
+      
+      // Noto'g'ri javob
       setLives(lives - 1);
       if (lives - 1 <= 0) {
         setGameOver(true);
       } else {
-        setCurrentWordIndex(currentWordIndex + 1);
+        setTimeout(() => {
+          setCurrentWordIndex(currentWordIndex + 1);
+        }, 1000);
       }
     }
   };
 
-  // Handle timer expiration
+  // Vaqt tugashi
   const handleTimeExpired = () => {
     setTimeExpired(true);
     setLives(lives - 1);
@@ -106,87 +137,122 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
     if (lives - 1 <= 0) {
       setGameOver(true);
     } else {
-      // Wait a moment before moving to next word
+      // Keyingi so'zga o'tishdan oldin biroz kutish
       setTimeout(() => {
         setCurrentWordIndex(currentWordIndex + 1);
       }, 1500);
     }
   };
 
-  // Restart game
+  // O'yinni qayta boshlash
   const handleRestart = () => {
     setCurrentWordIndex(0);
     setLives(5);
     setGameOver(false);
     setGameWon(false);
     setSelectedLetters([]);
+    setShowError(false);
   };
 
-  // Render game over or game won screen
+  // O'rtadagi harfni ko'rsatadigan komponent
+  const MiddleLetter = () => {
+    const middleLetter = getMiddleLetter(currentWord);
+    return (
+      <div className="mb-4 text-center">
+        <span className="text-lg font-medium">O'rtadagi harf:</span>
+        <span className="ml-2 bg-primary text-white px-3 py-1 rounded-md font-bold text-xl">{middleLetter}</span>
+      </div>
+    );
+  };
+
+  // O'yin tugagan yoki yutilgan holatda ko'rsatish
   if (gameOver) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[500px] p-8">
         <h1 className="text-4xl font-bold mb-6">
-          {gameWon ? "You Win!" : "Game Over"}
+          {gameWon ? "Siz Yutdingiz! 🎉" : "O'yin tugadi"}
         </h1>
         <p className="text-xl mb-8">
           {gameWon 
-            ? `Congratulations! You completed all ${Math.min(10, words.length)} words.` 
-            : `You ran out of lives! You solved ${currentWordIndex} words.`}
+            ? `Tabriklayman! Siz barcha ${Math.min(10, words.length)} so'zni to'g'ri topdingiz!` 
+            : `Joningiz tugab qoldi 😕!`}
         </p>
         <button
           onClick={handleRestart}
           className="bg-primary text-white px-6 py-3 rounded-lg text-lg font-medium transition-colors hover:bg-primary/80"
         >
-          Play Again
+          Qayta o'ynash
         </button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center w-full max-w-xl mx-auto">
+    <div className={cn(
+      "flex flex-col items-center w-full max-w-xl mx-auto transition-colors duration-300",
+      showError ? "bg-red-100" : ""
+    )}>
       <GameStatus lives={lives} currentWord={currentWordIndex + 1} totalWords={Math.min(10, words.length)} />
       
       <div className="w-full mb-6">
-        <Timer 
-          duration={45} 
-          onTimeExpired={handleTimeExpired} 
-          isPaused={timeExpired}
-        />
+        {gameStarted && (
+          <Timer 
+            duration={45} 
+            onTimeExpired={handleTimeExpired} 
+            isPaused={timeExpired}
+          />
+        )}
       </div>
       
       <div className="bg-white/50 backdrop-blur-sm rounded-lg p-6 mb-8 w-full">
-        <h2 className="text-xl font-medium text-center mb-4">Hint: {currentHint}</h2>
+      {gameStarted && (
+        <>
+          <h2 className="text-xl font-medium text-center mb-4">Yordam: {currentHint}</h2> 
+          <MiddleLetter />
+        </>
+      )}
         
         <div className="flex flex-wrap justify-center gap-2 mb-6">
-          {Array.from({ length: currentWord.length }).map((_, index) => (
-            <LetterSlot 
-              key={index} 
-              letter={selectedLetters[index] || ''} 
-              onRemove={() => handleLetterRemove(index)}
-            />
-          ))}
+          {!gameStarted ? (
+            <button
+              className="w-full py-3 px-6 bg-primary text-white rounded-lg font-bold text-lg"
+              onClick={() => setGameStarted(true)}
+            >
+              O'yinni boshlash
+            </button>
+          ) : (
+            Array.from({ length: currentWord.length }).map((_, index) => (
+              <LetterSlot 
+                key={index} 
+                letter={selectedLetters[index] || ''} 
+                onRemove={() => handleLetterRemove(index)}
+              />
+            ))
+          )}
         </div>
       </div>
       
-      <VirtualKeyboard 
-        letters={shuffledLetters} 
-        onLetterClick={handleLetterClick} 
-      />
-      
-      <button 
-        onClick={handleSubmit}
-        disabled={selectedLetters.length !== currentWord.length}
-        className={cn(
-          "mt-8 px-8 py-3 rounded-lg font-medium transition-colors",
-          selectedLetters.length === currentWord.length 
-            ? "bg-primary text-white hover:bg-primary/80" 
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        )}
-      >
-        Submit
-      </button>
+      {gameStarted && (
+        <>
+          <VirtualKeyboard 
+            letters={UZBEK_KEYBOARD_LAYOUT} 
+            onLetterClick={(letter) => handleLetterClick(letter)} 
+          />
+          
+          <button 
+            onClick={handleSubmit}
+            disabled={selectedLetters.length !== currentWord.length}
+            className={cn(
+              "mt-8 px-8 py-3 rounded-lg font-medium transition-colors",
+              selectedLetters.length === currentWord.length 
+                ? "bg-primary text-white hover:bg-primary/80" 
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            )}
+          >
+            Jo'natish
+          </button>
+        </>
+      )}
     </div>
   );
 };

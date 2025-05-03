@@ -11,7 +11,7 @@ const GameStatus: React.FC<GameStatusProps> = ({ lives, currentWord, totalWords 
   return (
     <div className="flex justify-between w-full mb-4">
       <div className="flex items-center">
-        <span className="font-medium mr-2">Lives:</span>
+        <span className="font-medium mr-2">Joningiz:</span>
         <div className="flex">
           {Array.from({ length: 5 }).map((_, i) => (
             <span key={i} className="text-xl mr-1">
@@ -21,7 +21,7 @@ const GameStatus: React.FC<GameStatusProps> = ({ lives, currentWord, totalWords 
         </div>
       </div>
       <div>
-        <span className="font-medium">Word: {currentWord}/{totalWords}</span>
+        <span className="font-medium">So'zlar: {currentWord}/{totalWords}</span>
       </div>
     </div>
   );
