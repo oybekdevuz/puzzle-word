@@ -174,7 +174,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ words }) => {
         </h1>
         <p className="text-xl mb-8">
           {gameWon 
-            ? `Tabriklayman! Siz barcha ${Math.min(10, words.length)} so'zni to'g'ri topdingiz!` 
+            ? `Tabriklayman! Siz barcha ${Math.min(10, words.length)} ta so'zni to'g'ri topdingiz!` 
             : `Joningiz tugab qoldi 😕!`}
         </p>
         <button
