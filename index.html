@@ -20,6 +20,11 @@
 
     <link rel="canonical" href="https://your-domain.com/" />
     <link rel="icon" href="/favicon.ico" />
+
+    <!-- Yandex.RTB -->
+    <script>window.yaContextCb=window.yaContextCb||[]</script>
+    <script src="https://yandex.ru/ads/system/context.js" async></script>
+
   </head>
 
   <body>
@@ -27,5 +32,25 @@
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Yandex.RTB R-A-15353729-1 -->
+    <script>
+      window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+              "blockId": "R-A-15353729-1",
+              "type": "topAd"
+          })
+      })
+    </script>
+        <!-- Yandex.RTB R-A-15353729-2 -->
+    <div id="yandex_rtb_R-A-15353729-2"></div>
+    <script>
+    window.yaContextCb.push(() => {
+        Ya.Context.AdvManager.render({
+            "blockId": "R-A-15353729-2",
+            "renderTo": "yandex_rtb_R-A-15353729-2",
+            "type": "feed"
+        })
+    })
+    </script>
   </body>
 </html>
