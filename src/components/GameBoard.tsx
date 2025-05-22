@@ -21,7 +21,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
   const [timeExpired, setTimeExpired] = useState(false);
   const [showError, setShowError] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const [trueAnswersCount, setTrueAnswersCount ] = useState(0)
+  const [trueAnswersCount, setTrueAnswersCount] = useState(0);
 
   const currentWord = words[currentWordIndex]?.word || '';
   const currentHint = words[currentWordIndex]?.hint || '';
@@ -30,15 +30,35 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
   const UZBEK_KEYBOARD_LAYOUT = [
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
     ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-    ["Z", "X", "C", "V", "B", "N", "M","ʻ"],
+    ["Z", "X", "C", "V", "B", "N", "M", "Oʻ", "Gʻ"],
   ];
 
   // O'rtadagi harfni topish
-  const getMiddleLetter = useCallback((word: string) => {
-    if (!word) return '';
-    const middleIndex = Math.floor(word.length / 2);
-    return word[middleIndex].toUpperCase();
-  }, []);
+const getMiddleLetter = useCallback((word: string) => {
+  if (!word) return '';
+
+  // So'zni harflarga ajratish
+  const chars = word.split('');
+  const combinedChars: string[] = [];
+
+  // Harflarni birlashtirish
+  for (let i = 0; i < chars.length; i++) {
+    if ((chars[i] === 'o' || chars[i] === 'g') && chars[i + 1] === 'ʻ') {
+      combinedChars.push(chars[i] + 'ʻ'); // oʻ yoki gʻ sifatida birlashtirish
+      i++; // Keyingi belgi (ʻ) ni o'tkazib yuboramiz
+    } else {
+      combinedChars.push(chars[i]);
+    }
+  }
+
+  // O'rtadagi harfni aniqlash
+  const middleIndex = Math.floor(combinedChars.length / 2);
+  return combinedChars[middleIndex].toUpperCase();
+}, []);
+
+  const normalizeWord = (word: string) => {
+    return word.replace(/oʻ/g, 'o').replace(/gʻ/g, 'g');
+  };
   
   // Yangi so'z uchun qayta sozlash
   const setupNewWord = useCallback(() => {
@@ -70,7 +90,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
   useEffect(() => {
     if (gameWon) {
       launchConfetti();
-      // Bir necha marta confetti otilishi
       const interval = setInterval(() => {
         launchConfetti();
       }, 700);
@@ -83,7 +102,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
 
   // Klaviaturadan harf tanlash - harflar yo'q bo'lib ketmaydi
   const handleLetterClick = (letter: string) => {
-    if (selectedLetters.length < currentWord.length) {
+    if (selectedLetters.length < normalizeWord(currentWord).length) {
       setSelectedLetters([...selectedLetters, letter]);
     }
   };
@@ -91,7 +110,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
   // Harfni o'chirib tashlash
   const handleLetterRemove = (index: number) => {
     if (index >= 0 && index < selectedLetters.length) {
-      // Faqat tanlangan harflar ro'yxatidan olib tashlash
       const newSelectedLetters = [...selectedLetters];
       newSelectedLetters.splice(index, 1);
       setSelectedLetters(newSelectedLetters);
@@ -101,32 +119,32 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
   // Javobni tekshirish
   const handleSubmit = () => {
     const submittedWord = selectedLetters.join('');
-    
+      
     if (submittedWord.toLowerCase() === currentWord) {
       const nextTrueAnswersCount = trueAnswersCount + 1;
-      setTrueAnswersCount(nextTrueAnswersCount);
+      setTrueAnswersCount(nextTrueAnswersCount);;
       
       if (currentWordIndex + 1 >= 10) {        
         if(nextTrueAnswersCount == 10){
           setGameWon(true);
-        }else {
+        } else {
           setGameWon(false);
         }
         setGameOver(true);
+        setTrueAnswersCount(0)
       } else {
         setCurrentWordIndex(currentWordIndex + 1);
       }
     } else {
-      // Xato javob - qizil fon ko'rsatish
       setShowError(true);
       setTimeout(() => {
         setShowError(false);
       }, 1000);
       
-      // Noto'g'ri javob
       setLives(lives - 1);
       if (lives - 1 <= 0) {
         setGameOver(true);
+        setTrueAnswersCount(0)
       } else {
         setTimeout(() => {
           setCurrentWordIndex(currentWordIndex + 1);
@@ -136,14 +154,20 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
   };
 
   // Vaqt tugashi
-  const handleTimeExpired = () => {
+const handleTimeExpired = () => {
     setTimeExpired(true);
     setLives(lives - 1);
+    
+    // Vaqt tugaganida yutuqni tekshirish
+    if (trueAnswersCount === 10) {
+      setGameWon(true);
+    } else {
+      setGameWon(false);
+    }
     
     if (lives - 1 <= 0) {
       setGameOver(true);
     } else {
-      // Keyingi so'zga o'tishdan oldin biroz kutish
       setTimeout(() => {
         setCurrentWordIndex(currentWordIndex + 1);
       }, 1500);
@@ -160,6 +184,15 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
     setSelectedLetters([]);
     setShowError(false);
     setGameStarted(false);
+  };
+
+  const handleSkip = () => {
+    setLives(lives - 1);
+    if (lives - 1 <= 0) {
+      setGameOver(true);
+    } else {
+      setCurrentWordIndex(currentWordIndex + 1);
+    }
   };
 
   // O'rtadagi harfni ko'rsatadigan komponent
@@ -229,7 +262,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
               O'yinni boshlash
             </button>
           ) : (
-            Array.from({ length: currentWord.length }).map((_, index) => (
+            Array.from({ length: normalizeWord(currentWord).length }).map((_, index) => (
               <LetterSlot 
                 key={index} 
                 letter={selectedLetters[index] || ''} 
@@ -240,27 +273,34 @@ const GameBoard: React.FC<GameBoardProps> = ({ words, onRestart }) => {
         </div>
       </div>
       
-      {gameStarted && (
-        <>
-          <VirtualKeyboard 
-            letters={UZBEK_KEYBOARD_LAYOUT} 
-            onLetterClick={(letter) => handleLetterClick(letter)} 
-          />
-          
-          <button 
-            onClick={handleSubmit}
-            disabled={selectedLetters.length !== currentWord.length}
-            className={cn(
-              "mt-8 px-8 py-3 rounded-lg font-medium transition-colors",
-              selectedLetters.length === currentWord.length 
-                ? "bg-primary text-white hover:bg-primary/80" 
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            )}
-          >
-            Jo'natish
-          </button>
-        </>
-      )}
+{gameStarted && (
+  <div className="flex flex-col items-center">
+    <VirtualKeyboard 
+      letters={UZBEK_KEYBOARD_LAYOUT} 
+      onLetterClick={(letter) => handleLetterClick(letter)} 
+    />
+    <div className="flex justify-center gap-4 mt-4">
+      <button 
+        onClick={handleSubmit}
+        disabled={selectedLetters.length !== normalizeWord(currentWord).length}
+        className={cn(
+          "px-8 py-3 rounded-lg font-medium transition-colors",
+          selectedLetters.length === normalizeWord(currentWord).length 
+            ? "bg-primary text-white hover:bg-primary/80" 
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        )}
+      >
+        Jo'natish
+      </button>
+      <button
+        onClick={handleSkip}
+        className="px-8 py-3 rounded-lg font-medium bg-yellow-400 text-white hover:bg-yellow-500 transition-colors"
+      >
+        O'tkazish
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 };
