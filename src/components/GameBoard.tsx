@@ -100,6 +100,16 @@ const getMiddleLetter = useCallback((word: string) => {
     }
   }, [gameWon]);
 
+  useEffect(() => {
+  if (gameWon) {
+    launchConfetti();
+    const interval = setInterval(() => {
+      launchConfetti();
+    }, 700);
+    return () => clearInterval(interval); // Cleanup on unmount
+  }
+}, [gameWon]);
+
   // Klaviaturadan harf tanlash - harflar yo'q bo'lib ketmaydi
   const handleLetterClick = (letter: string) => {
     if (selectedLetters.length < normalizeWord(currentWord).length) {
@@ -117,41 +127,33 @@ const getMiddleLetter = useCallback((word: string) => {
   };
 
   // Javobni tekshirish
-  const handleSubmit = () => {
-    const submittedWord = selectedLetters.join('');
-      
-    if (submittedWord.toLowerCase() === currentWord) {
-      const nextTrueAnswersCount = trueAnswersCount + 1;
-      setTrueAnswersCount(nextTrueAnswersCount);;
-      
-      if (currentWordIndex + 1 >= 10) {        
-        if(nextTrueAnswersCount == 10){
-          setGameWon(true);
-        } else {
-          setGameWon(false);
-        }
-        setGameOver(true);
-        setTrueAnswersCount(0)
-      } else {
-        setCurrentWordIndex(currentWordIndex + 1);
-      }
+const handleSubmit = () => {
+  const submittedWord = selectedLetters.join('');
+  if (submittedWord.toLowerCase() === currentWord) {
+    const nextTrueAnswersCount = trueAnswersCount + 1;
+    setTrueAnswersCount(nextTrueAnswersCount);
+    if (currentWordIndex + 1 >= Math.min(10, words.length)) {
+      setGameWon(nextTrueAnswersCount >= Math.min(10, words.length));
+      setGameOver(true);
     } else {
-      setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 1000);
-      
-      setLives(lives - 1);
-      if (lives - 1 <= 0) {
-        setGameOver(true);
-        setTrueAnswersCount(0)
-      } else {
-        setTimeout(() => {
-          setCurrentWordIndex(currentWordIndex + 1);
-        }, 1000);
-      }
+      setCurrentWordIndex(currentWordIndex + 1);
     }
-  };
+  } else {
+    setShowError(true);
+    setTimeout(() => {
+      setShowError(false);
+    }, 1000);
+    setLives(lives - 1);
+    if (lives - 1 <= 0) {
+      setGameOver(true);
+      setGameWon(false);
+    } else {
+      setTimeout(() => {
+        setCurrentWordIndex(currentWordIndex + 1);
+      }, 1000);
+    }
+  }
+};
 
   // Vaqt tugashi
 const handleTimeExpired = () => {
@@ -167,11 +169,7 @@ const handleTimeExpired = () => {
     
     if (lives - 1 <= 0) {
       setGameOver(true);
-    } else {
-      setTimeout(() => {
-        setCurrentWordIndex(currentWordIndex + 1);
-      }, 1500);
-    }
+    } 
   };
 
   // O'yinni qayta boshlash
@@ -273,34 +271,35 @@ const handleTimeExpired = () => {
         </div>
       </div>
       
-{gameStarted && (
-  <div className="flex flex-col items-center">
-    <VirtualKeyboard 
-      letters={UZBEK_KEYBOARD_LAYOUT} 
-      onLetterClick={(letter) => handleLetterClick(letter)} 
-    />
-    <div className="flex justify-center gap-4 mt-4">
-      <button 
-        onClick={handleSubmit}
-        disabled={selectedLetters.length !== normalizeWord(currentWord).length}
-        className={cn(
-          "px-8 py-3 rounded-lg font-medium transition-colors",
-          selectedLetters.length === normalizeWord(currentWord).length 
-            ? "bg-primary text-white hover:bg-primary/80" 
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        )}
-      >
-        Jo'natish
-      </button>
-      <button
-        onClick={handleSkip}
-        className="px-8 py-3 rounded-lg font-medium bg-yellow-400 text-white hover:bg-yellow-500 transition-colors"
-      >
-        O'tkazish
-      </button>
-    </div>
-  </div>
-)}
+    {gameStarted && (
+        <>
+          <VirtualKeyboard 
+            letters={UZBEK_KEYBOARD_LAYOUT} 
+            onLetterClick={(letter) => handleLetterClick(letter)} 
+          />
+          
+          <button 
+            onClick={handleSubmit}
+            disabled={selectedLetters.length !== normalizeWord(currentWord).length}
+            className={cn(
+              "mt-8 px-8 py-3 rounded-lg font-medium transition-colors",
+              selectedLetters.length === normalizeWord(currentWord).length 
+                ? "bg-primary text-white hover:bg-primary/80" 
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            )}
+          >
+            Jo'natish
+          </button>
+
+        <button
+          onClick={handleSkip}
+          className="mt-4 px-6 py-3 rounded-lg font-medium bg-yellow-400 text-white hover:bg-yellow-500 transition-colors"
+        >
+          O'tkazish {'>'}
+        </button>
+          
+        </>
+      )}
     </div>
   );
 };
